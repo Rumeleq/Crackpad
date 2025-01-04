@@ -59,7 +59,7 @@ def extract_fanfic(link_list):
                 with open(output_filename, 'a', encoding='utf-8') as f:
                     f.write(text)
 
-                print(f'{TextColors.GREEN}Zakończono ekstrakcję{TextColors.ENDCOLOR} z <pre> nr {i + 1} z linku: {TextColors.PURPLE}{link}{TextColors.ENDCOLOR}. Zapisano w: {TextColors.YELLOW}{os.getcwd() + "\\" + output_filename}{TextColors.ENDCOLOR}')
+                print(f'{TextColors.GREEN}Zakończono ekstrakcję{TextColors.ENDCOLOR} z <pre> nr {i + 1} z linku: {TextColors.PURPLE}{link}{TextColors.ENDCOLOR}. Zapisano w: {TextColors.YELLOW}{os.path.join(os.getcwd(), output_filename)}{TextColors.ENDCOLOR}')
         else:
             print(f'{TextColors.ERROR}Coś się wysypało: {TextColors.ENDCOLOR}{fanfik.status_code}')
 
