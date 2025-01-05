@@ -57,7 +57,7 @@ def main():
     url_regex = re.compile(r'^https://')
     while True:
         try:
-            NFZ = (input(f'Podaj {link_number} link rozdziału do odczytania lub rozpocznij kradzież fanfika wprowadzając "quit": {TextColors.YELLOW}')).lower()
+            NFZ = (input(f'Podaj {link_number}. link rozdziału do odczytania lub rozpocznij kradzież fanfika wprowadzając "quit": {TextColors.YELLOW}')).lower()
             print(f'{TextColors.ENDCOLOR}')
             if NFZ == 'quit':
                 break
