@@ -1,20 +1,7 @@
-import subprocess
-import sys
 import os
 import re
-
-try:
-    import requests
-except ImportError:
-    print('Instaluję paczkę requests... ')
-    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'requests'])
-    import requests
-try:
-    from bs4 import BeautifulSoup
-except ImportError:
-    print('Instaluję paczkę beautifulsoup4...')
-    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'beautifulsoup4'])
-    from bs4 import BeautifulSoup
+from requests import get as requests_get
+from bs4 import BeautifulSoup
 
 
 class TextColors:
@@ -42,7 +29,7 @@ def extract_fanfic(link_list):
             chapter_number = link[link.rfind('-') + 1:]
         else:
             chapter_number = '#'
-        fanfik = requests.get(link, headers=headers)
+        fanfik = requests_get(link, headers=headers)
 
         if fanfik.status_code == 200:
             raw_fanfic = BeautifulSoup(fanfik.text, 'html.parser')
@@ -70,7 +57,8 @@ def main():
     url_regex = re.compile(r'^https://')
     while True:
         try:
-            NFZ = (input(f'Podaj {link_number} link rozdziału do odczytania lub rozpocznij kradzież fanfika wprowadzając "quit": ')).lower()
+            NFZ = (input(f'Podaj {link_number} link rozdziału do odczytania lub rozpocznij kradzież fanfika wprowadzając "quit": {TextColors.YELLOW}')).lower()
+            print(f'{TextColors.ENDCOLOR}')
             if NFZ == 'quit':
                 break
             elif url_regex.match(NFZ):
@@ -81,7 +69,7 @@ def main():
                 while True:
                     page_number += 1
                     page_link = NFZ + f'/page/{page_number}'
-                    response = requests.get(page_link, headers=headers)
+                    response = requests_get(page_link, headers=headers)
                     first_p = BeautifulSoup(response.text, 'html.parser').select_one('pre > p')
 
                     if first_p is None:
@@ -100,3 +88,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+    input('Naciśnij Enter, aby zamknąć program...')
