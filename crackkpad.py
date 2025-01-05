@@ -1,6 +1,6 @@
-from os import getcwd as os_getcwd, path as os_path
-from re import compile as re_compile, IGNORECASE as RE_IGNORECASE
-from requests import get as requests_get
+import os
+import re
+import requests
 from bs4 import BeautifulSoup
 
 
@@ -19,8 +19,8 @@ headers = {
 
 
 def extract_fanfic(link_list):
-    chapter_regex1 = re_compile(r'-\d+$', RE_IGNORECASE)
-    chapter_regex_page = re_compile(r'-\d+/page/\d+$', RE_IGNORECASE)
+    chapter_regex1 = re.compile(r'-\d+$', re.IGNORECASE)
+    chapter_regex_page = re.compile(r'-\d+/page/\d+$', re.IGNORECASE)
     for link in link_list:
         print(link)
         if chapter_regex_page.search(link):
@@ -29,7 +29,7 @@ def extract_fanfic(link_list):
             chapter_number = link[link.rfind('-') + 1:]
         else:
             chapter_number = '#'
-        fanfik = requests_get(link, headers=headers)
+        fanfik = requests.get(link, headers=headers)
 
         if fanfik.status_code == 200:
             raw_fanfic = BeautifulSoup(fanfik.text, 'html.parser')
@@ -46,7 +46,7 @@ def extract_fanfic(link_list):
                 with open(output_filename, 'a', encoding='utf-8') as f:
                     f.write(text)
 
-                print(f'{TextColors.GREEN}Zakończono ekstrakcję{TextColors.ENDCOLOR} z <pre> nr {i + 1} z linku: {TextColors.PURPLE}{link}{TextColors.ENDCOLOR}. Zapisano w: {TextColors.YELLOW}{os_path.join(os_getcwd(), output_filename)}{TextColors.ENDCOLOR}')
+                print(f'{TextColors.GREEN}Zakończono ekstrakcję{TextColors.ENDCOLOR} z <pre> nr {i + 1} z linku: {TextColors.PURPLE}{link}{TextColors.ENDCOLOR}. Zapisano w: {TextColors.YELLOW}{os.path.join(os.getcwd(), output_filename)}{TextColors.ENDCOLOR}')
         else:
             print(f'{TextColors.ERROR}Coś się wysypało: {TextColors.ENDCOLOR}{fanfik.status_code}')
 
@@ -54,7 +54,7 @@ def extract_fanfic(link_list):
 def main():
     url_list = []
     link_number = 1
-    url_regex = re_compile(r'^https://')
+    url_regex = re.compile(r'^https://')
     while True:
         try:
             NFZ = (input(f'Podaj {link_number}. link rozdziału do odczytania lub rozpocznij kradzież fanfika wprowadzając "quit": {TextColors.YELLOW}')).lower()
@@ -69,7 +69,7 @@ def main():
                 while True:
                     page_number += 1
                     page_link = NFZ + f'/page/{page_number}'
-                    response = requests_get(page_link, headers=headers)
+                    response = requests.get(page_link, headers=headers)
                     first_p = BeautifulSoup(response.text, 'html.parser').select_one('pre > p')
 
                     if first_p is None:
